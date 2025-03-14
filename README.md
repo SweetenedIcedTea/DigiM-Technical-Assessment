@@ -19,6 +19,7 @@ The Image Hub API is a Django REST Framework-based service that enables users to
 
 - Python 3.8 or higher
 - Pip (Python package manager)
+- .env file (provided in email)
 - Virtual environment (recommended)
 
 ### Installation Steps
@@ -26,8 +27,8 @@ The Image Hub API is a Django REST Framework-based service that enables users to
 1. Clone the repository:
 
    ```bash
-   git clone [repository-url]
-   cd [project-directory]
+   git clone https://github.com/SweetenedIcedTea/DigiM-Technical-Assessment
+   cd DigiM-Technical-Assessment
    ```
 
 2. Create and activate a virtual environment:
@@ -43,13 +44,24 @@ The Image Hub API is a Django REST Framework-based service that enables users to
    pip install -r requirements.txt
    ```
 
-4. Apply database migrations:
+4. Set up enviroment variables:
+
+- Download the .env files from the email
+- Place it in the project's root directory
+
+  ```bash
+  DJANGO_SECRET_KEY=your_secret_key_here
+  DJANGO_DEBUG=True  # Set to False in production
+  ALLOWED_HOSTS=localhost,127.0.0.1  # Comma-separated list
+  ```
+
+5. Apply database migrations:
 
    ```bash
    python manage.py migrate
    ```
 
-5. Start the development server:
+6. Start the development server:
    ```bash
    python manage.py runserver
    ```
@@ -70,58 +82,69 @@ The base URL for all API endpoints is: `/api/`
 
 ### Images
 
-| Method | Endpoint                                                      | Description                             | Request Body                | Response                   |
-| ------ | ------------------------------------------------------------- | --------------------------------------- | --------------------------- | -------------------------- |
-| GET    | `/api/folders/{folder_identifier}/images/`                    | List all images in a folder             | None                        | Array of image objects     |
-| POST   | `/api/folders/{folder_identifier}/images/`                    | Upload a new image to a folder          | Form data with `image_file` | Created image object       |
-| GET    | `/api/folders/{folder_identifier}/images/{image_identifier}/` | Retrieve a specific image by ID or slug | None                        | Image object with metadata |
+| Method | Endpoint                                                      | Description                             | Request Body                | Response                               |
+| ------ | ------------------------------------------------------------- | --------------------------------------- | --------------------------- | -------------------------------------- |
+| GET    | `/api/folders/{folder_identifier}/images/`                    | List all images in a folder             | None                        | Array of image objects                 |
+| POST   | `/api/folders/{folder_identifier}/images/`                    | Upload a new image to a folder          | Form data with `image_file` | Created image object                   |
+| GET    | `/api/folders/{folder_identifier}/images/{image_identifier}/` | Retrieve a specific image by ID or slug | None                        | Web view of Image object with metadata |
 
-### Response Object Examples
+## Example Requests and Responces
 
-#### Folder Object
+### 1. Create a Folder
+
+```bash
+# Using curl
+curl -X POST "http://localhost:8000/api/folders/" \
+     -H "Content-Type: application/json" \
+     -d '{"name": "Vacation Photos 2024"}'
+
+# Using httpie
+http POST "http://localhost:8000/api/folders/" name="Product Screenshots"
+```
+
+**Response**:
 
 ```json
 {
-  "id": 1,
-  "name": "Vacation Photos",
-  "slug": "vacation-photos",
-  "created_at": "2023-06-15T10:30:45Z",
-  "image_count": 5,
-  "images": [
-    {
-      "id": 1,
-      "name": "beach_sunset",
-      "slug": "beach-sunset",
-      "image_file": "http://example.com/media/uploads/1/beach_sunset.jpg",
-      "upload_date": "2023-06-15T10:35:12Z",
-      "width": 1920,
-      "height": 1080,
-      "file_size": 2457600,
-      "formatted_file_size": "2.3 MB",
-      "is_color": true,
-      "url": "http://example.com/media/uploads/1/beach_sunset.jpg"
-    }
-    // Additional images...
-  ]
+  "id": 2,
+  "name": "Vacation Photos 2024",
+  "slug": "vacation-photos-2024",
+  "created_at": "2024-05-20T14:30:00Z",
+  "image_count": 0,
+  "images": []
 }
 ```
 
-#### Image Object
+---
+
+### 2. Upload an Image to a Folder
+
+```bash
+# Using curl
+curl -X POST "http://localhost:8000/api/folders/vacation-photos-2024/images/" \
+     -H "Content-Type: multipart/form-data" \
+     -F "image_file=@beach_sunset.jpg"
+
+# Using httpie
+http --form POST "http://localhost:8000/api/folders/2/images/" image_file@mountain_view.png
+```
+
+**Response**:
 
 ```json
 {
-  "id": 1,
-  "folder": 1,
+  "id": 5,
+  "folder": 2,
   "name": "beach_sunset",
   "slug": "beach-sunset",
-  "image_file": "http://example.com/media/uploads/1/beach_sunset.jpg",
-  "upload_date": "2023-06-15T10:35:12Z",
+  "image_file": "http://localhost:8000/media/uploads/2/beach_sunset.jpg",
+  "upload_date": "2024-05-20T14:35:12Z",
   "width": 1920,
   "height": 1080,
   "file_size": 2457600,
   "formatted_file_size": "2.3 MB",
   "is_color": true,
-  "url": "http://example.com/media/uploads/1/beach_sunset.jpg"
+  "url": "http://localhost:8000/media/uploads/2/beach_sunset.jpg"
 }
 ```
 
