@@ -55,17 +55,18 @@ class FolderListCreate(generics.ListCreateAPIView):
         return Folder.objects.prefetch_related('image_set').all()
 
 
-class FolderDetail(generics.RetrieveAPIView):
+class FolderDetail(generics.RetrieveUpdateDestroyAPIView):
     """
     API endpoint for retrieving a single folder's details.
     
     GET: Retrieve folder details by ID or slug
     """
     serializer_class = FolderSerializer
+    lookup_field = 'slug'
     
     def get_queryset(self):
         """Return all folders with prefetched images."""
-        return Folder.objects.prefetch_related('image_set')
+        return Folder.objects.all()
     
     def get_object(self) -> Folder:
         """

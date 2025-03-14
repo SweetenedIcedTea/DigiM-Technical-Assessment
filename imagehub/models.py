@@ -3,6 +3,7 @@ from django.utils.text import slugify
 import os
 from typing import Any, Optional
 from PIL import Image as PILImage
+from django.core.validators import FileExtensionValidator, MaxValueValidator
 
 def generate_unique_slug(
     model_class: models.Model, 
@@ -131,7 +132,12 @@ class Image(models.Model):
     )
     name = models.CharField(max_length=255, blank=True)
     slug = models.SlugField(max_length=255)
-    image_file = models.ImageField(upload_to=upload_to_path)
+    image_file = models.ImageField(
+        upload_to=upload_to_path,
+        validators=[
+            FileExtensionValidator(allowed_extensions=['png', 'jpg', 'jpeg', 'gif']),
+        ]
+    )
     upload_date = models.DateTimeField(auto_now_add=True)
     width = models.PositiveIntegerField(editable=False)
     height = models.PositiveIntegerField(editable=False)
@@ -153,6 +159,7 @@ class Image(models.Model):
         Raises:
             ValueError: If the image file is invalid
         """
+        
         # Set name from filename
         if self.image_file:
             filename = os.path.basename(self.image_file.name)

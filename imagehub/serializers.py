@@ -2,7 +2,6 @@ from rest_framework import serializers
 from .models import Folder, Image
 from typing import Dict, Any
 
-
 class ImageSerializer(serializers.ModelSerializer):
     """
     Serializer for the Image model.
