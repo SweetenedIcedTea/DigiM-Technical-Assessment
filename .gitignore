@@ -1,0 +1,7 @@
+
+*.sqlite3
+/venv
+/imagehub/__pycache__
+/imagehub/migrations/__pycache__
+/media/uploads/1
+/tech_app/__pycache__

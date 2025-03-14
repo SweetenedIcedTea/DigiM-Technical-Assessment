@@ -1,0 +1,97 @@
+<!-- Create this file as myapp/templates/myapp/image_detail.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Image Details</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        color: #333;
+      }
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        display: flex;
+        gap: 30px;
+      }
+      .image-container {
+        flex: 1;
+      }
+      .image-container img {
+        max-width: 100%;
+        height: auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .metadata {
+        flex: 1;
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+      }
+      .metadata h2 {
+        margin-top: 0;
+        color: #444;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 10px;
+      }
+      .metadata-item {
+        margin-bottom: 15px;
+      }
+      .metadata-label {
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #666;
+      }
+      .metadata-value {
+        font-size: 1.1em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="image-container">
+        <img src="{{ image.image_file.url }}" alt="Uploaded image" />
+      </div>
+      <div class="metadata">
+        <h2>Image Information</h2>
+
+        <div class="metadata-item">
+          <div class="metadata-label">Dimensions</div>
+          <div class="metadata-value">
+            {{ image.width }} × {{ image.height }} pixels
+          </div>
+        </div>
+
+        <div class="metadata-item">
+          <div class="metadata-label">File Size</div>
+          <div class="metadata-value">{{ file_size_formatted }}</div>
+        </div>
+
+        <div class="metadata-item">
+          <div class="metadata-label">Image Type</div>
+          <div class="metadata-value">
+            {% if image.is_color %}Color{% else %}Grayscale{% endif %}
+          </div>
+        </div>
+
+        <div class="metadata-item">
+          <div class="metadata-label">Uploaded On</div>
+          <div class="metadata-value">
+            {{ formatted_date }} at {{ formatted_time }}
+          </div>
+        </div>
+
+        <div class="metadata-item">
+          <div class="metadata-label">Folder</div>
+          <div class="metadata-value">{{ image.folder.name }}</div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
