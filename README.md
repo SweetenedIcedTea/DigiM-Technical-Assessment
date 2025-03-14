@@ -224,14 +224,6 @@ coverage run --source='.' manage.py test
 coverage report
 ```
 
-### Development Guidelines
-
-1. Follow PEP 8 style guidelines for Python code
-2. Include docstrings for all functions and classes
-3. Add appropriate type hints
-4. Write unit tests for new features
-5. Run tests before submitting pull requests
-
 ## Additional Resources
 
 - [Django Documentation](https://docs.djangoproject.com/)
